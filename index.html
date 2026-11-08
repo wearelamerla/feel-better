@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lamerla Feel Better Bundle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Three small apps to help you feel better. Free, and everything stays on your phone.">
+<meta name="theme-color" content="#EFE6D6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Feel Better">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one phone-width column, sage band up top, sand ground, tab bar fixed at the bottom. Deliberately one light look. */
+:root{
+  --sand:#EFE6D6; --paper:#F7F1E6; --sand-2:#E3D7C2; --line:#D9CCB4;
+  --sage:#8C9C7E; --sage-d:#5E7052; --sage-l:#DCE2D2;
+  --brown:#4A3728; --ink:#2F2118; --muted:#6B5746; --on-dark:#F3ECDF;
+  --over:#A2402C; --over-bg:#F2DED6;
+  --head:'Bricolage Grotesque','Avenir Next','Segoe UI',sans-serif;
+  --body:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:20px; --pill:999px;
+  --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
+  --sl:env(safe-area-inset-left,0px); --sr:env(safe-area-inset-right,0px);
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+body{min-height:100vh;min-height:100dvh;overscroll-behavior-y:none}
+body::before{content:"";position:fixed;inset:0 0 auto;height:var(--st);z-index:9;background:var(--sand)}
+body.band::before{background:var(--sage)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--sage-d);outline-offset:2px}
+.app{max-width:540px;margin:0 auto;padding-block:calc(var(--st) + 4px) calc(var(--sb) + 104px);padding-left:max(16px,var(--sl));padding-right:max(16px,var(--sr))}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;height:56px;gap:8px}
+.brand{display:flex;flex-direction:column;align-items:center;line-height:1.15;text-align:center}
+.brand b{font-family:var(--head);font-weight:700;font-size:18px}
+.brand span{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.iconbtn{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;flex:none}
+.iconbtn:active{background:var(--sand-2)}
+.iconbtn svg{width:22px;height:22px}
+.spacer{width:44px;flex:none}
+
+/* hub band */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);min-height:44px}
+.logo svg{width:32px;height:32px;flex:none}
+.logo b{font-family:var(--head);font-weight:700;font-size:21px}
+.logo span{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-top:-2px}
+.band-wrap{background:var(--sage);margin:calc(-1 * (var(--st) + 4px)) calc(-1 * max(16px,var(--sr))) 0 calc(-1 * max(16px,var(--sl)));padding:calc(var(--st) + 4px) max(16px,var(--sr)) 56px max(16px,var(--sl))}
+.band-wrap h1{font-size:46px;line-height:1.02;margin:10px 0 14px}
+.band-wrap .sub{font-size:18px;line-height:1.55}
+.band-wrap .iconbtn:active{background:var(--sage-l)}
+.band-wrap + *{margin-top:-30px!important}
+.band-wrap.tight{padding-bottom:40px}
+.band-wrap.tight + *{margin-top:-18px!important}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--muted);margin:0}
+.band-wrap .eyebrow{color:var(--ink)}
+h1,.h1{font-family:var(--head);font-weight:700;font-size:40px;line-height:1.04;letter-spacing:-.01em;margin:6px 0 10px;text-wrap:balance}
+h2.sec{font-family:var(--head);font-weight:700;font-size:22px;margin:34px 0 12px}
+.sub{margin:0;color:var(--brown);font-size:17px;max-width:34em}
+.band-wrap .sub{color:var(--ink)}
+
+/* hub app cards */
+.apps{display:flex;flex-direction:column;gap:14px;margin-top:-18px}
+.appcard{display:flex;flex-direction:column;gap:14px;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:28px 26px 22px;text-decoration:none;color:inherit}
+.appcard:active{transform:scale(.99)}
+.ic{width:60px;height:60px;border-radius:18px;background:var(--sage);display:grid;place-items:center;flex:none;color:var(--ink)}
+.ic svg{width:30px;height:30px}
+.appcard .nm{font-family:var(--head);font-weight:700;font-size:30px;line-height:1.05}
+.appcard .for{font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--sage-d);margin-top:-6px}
+.appcard p{margin:0;color:var(--brown);font-size:17px;line-height:1.6}
+.status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;padding-top:16px;border-top:1px solid var(--line);font-weight:600;font-size:15.5px}
+.status svg{width:20px;height:20px;flex:none;color:var(--sage-d)}
+.priv{background:var(--brown);color:var(--on-dark);margin:34px calc(-1 * max(16px,var(--sr))) 0 calc(-1 * max(16px,var(--sl)));padding:44px max(22px,var(--sr)) 40px max(22px,var(--sl));display:flex;flex-direction:column;gap:14px}
+.priv .eyebrow{color:#C9D3BE}
+.priv h2{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.08;margin:0;text-wrap:balance}
+.priv p{margin:0;color:#E3D8C4;font-size:17px;line-height:1.6}
+.priv ul{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.priv li{display:flex;align-items:center;gap:12px;background:#5A4434;border-radius:16px;padding:16px 18px;font-size:16.5px;font-weight:500}
+.priv li svg{width:20px;height:20px;flex:none;color:#C9D3BE}
+.priv + .foot{margin-top:0;padding-top:24px}
+.hero{padding-bottom:72px}
+.hero h1{font-size:clamp(44px,12vw,64px);line-height:1;margin:12px 0 18px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{aspect-ratio:1;position:relative;max-width:100%;min-width:0;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:14px;text-decoration:none;color:var(--ink)}
+.tile:active{transform:scale(.98)}
+.tile .ic{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:11px}
+.tile .ic svg{width:19px;height:19px}
+.tile .nm{font-family:var(--head);font-weight:700;font-size:19px;line-height:1.02;letter-spacing:-.01em;padding-right:36px}
+.tile .for{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--sage-d);margin-top:3px}
+.tile .st{font-size:13px;color:var(--brown);margin-top:6px;line-height:1.27}
+.tile.dark{background:var(--brown);border-color:var(--brown);color:var(--on-dark)}
+.tile.dark .ic{background:#5A4434;color:#C9D3BE}
+.tile.dark .for{color:#C9D3BE}
+.tile.dark .st{color:#E3D8C4}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 26px;border-radius:var(--pill);background:var(--ink);color:var(--on-dark);font-weight:600;font-size:16.5px}
+.btn:active{background:var(--brown)}
+.btn svg{width:18px;height:18px}
+.btn.block{width:100%}
+.btn.sage{background:var(--sage-d);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost:active{background:var(--sand-2)}
+.btn.danger{background:transparent;color:var(--over);box-shadow:inset 0 0 0 1.5px var(--over)}
+.btn:disabled{opacity:.4}
+.link{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.actions{display:grid;gap:10px;margin-top:22px}
+.row2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+
+/* cards & lists */
+.card{display:block;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;margin-bottom:12px}
+button.card:active{transform:scale(.99)}
+.card .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card .name{font-weight:600;font-size:17px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;background:var(--sage-l);color:var(--ink);border-radius:var(--pill);padding:3px 10px;flex:none}
+.amt{font-family:var(--head);font-weight:700;font-size:34px;line-height:1.1;margin-top:8px;font-variant-numeric:tabular-nums}
+.amt small{font-family:var(--body);font-size:15px;font-weight:400;color:var(--muted);margin-left:6px}
+.meta{color:var(--muted);font-size:14px;margin-top:2px}
+.bar{height:8px;background:var(--sand-2);border-radius:var(--pill);overflow:hidden;margin-top:12px}
+.bar>i{display:block;height:100%;background:var(--sage-d);border-radius:var(--pill)}
+.bar.over>i{background:var(--over)}
+.neg{color:var(--over)}
+.big{background:var(--sage-l);border-radius:26px;padding:26px 22px 22px;text-align:center;margin-top:16px}
+.big.over{background:var(--over-bg)}
+.big .n{font-family:var(--head);font-weight:700;font-size:54px;line-height:1;font-variant-numeric:tabular-nums}
+.big .l{margin-top:8px;color:var(--brown)}
+.big .bar{background:rgba(255,255,255,.65);height:10px;margin-top:18px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-align:center}
+.stat b{display:block;font-family:var(--head);font-weight:700;font-size:24px;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.list{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.item{display:flex;width:100%;text-align:left;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item:active{background:var(--sand)}
+.item .dot{width:36px;height:36px;border-radius:50%;background:var(--sage-l);display:grid;place-items:center;flex:none}
+.item .dot svg{width:17px;height:17px}
+.item .t{flex:1;min-width:0}
+.item .t div{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .t span{font-size:13px;color:var(--muted)}
+.item .v{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.empty{text-align:center;color:var(--muted);padding:26px 16px}
+.story{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px 20px 8px;margin-top:22px}
+.story .who{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);font-weight:700}
+.story .st{font-family:var(--head);font-weight:700;font-size:22px;margin:2px 0 10px}
+.story p{margin:0 0 12px;color:var(--brown)}
+.steps{display:flex;flex-direction:column;gap:8px;margin:22px 0 0;padding:0;list-style:none}
+.steps li{display:flex;align-items:center;gap:12px;font-weight:600}
+.steps li i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--sage-l);display:grid;place-items:center;font-size:14px;flex:none}
+
+/* lucky */
+.cover{background:var(--sage);border-radius:26px;padding:24px 22px 26px;margin-top:6px}
+.cover .date{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.cover .hl{font-family:var(--head);font-weight:700;font-size:36px;line-height:1.05;margin-top:6px;text-wrap:balance}
+.count{margin:20px 0 10px;color:var(--brown)}
+.page{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.entry{display:flex;width:100%;align-items:flex-start;gap:12px;text-align:left;padding:14px 16px;border-top:1px solid var(--line)}
+.entry:first-child{border-top:0}
+.entry:active{background:var(--sand)}
+.entry .spark{width:16px;height:16px;flex:none;color:var(--sage-d);margin-top:4px}
+.entry .tx{flex:1;min-width:0;font-size:17px;overflow-wrap:anywhere}
+.entry .tm{font-size:13px;color:var(--muted);flex:none;margin-top:3px;font-variant-numeric:tabular-nums}
+.entry.pop{animation:pop .5s ease}
+@keyframes pop{0%{background:var(--sage-l)}100%{background:transparent}}
+.notebtn,.dnote{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;margin-top:12px;border-radius:var(--r);padding:16px 18px;background:var(--paper);border:1.5px dashed var(--line)}
+.notebtn.eve{border:1.5px solid var(--sage-d);background:var(--sage-l)}
+.notebtn b{font-size:17px}
+.notebtn .ns{color:var(--muted);font-size:14px}
+.nl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--sage-d)}
+.dnote{border-style:solid;background:var(--paper)}
+.dnote .nt{color:var(--brown);overflow-wrap:anywhere}
+.memory{margin-top:26px;background:var(--brown);color:var(--on-dark);border-radius:24px;padding:22px;text-align:center}
+.memory .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#C9D3BE}
+.memory .mt{font-family:var(--head);font-weight:700;font-size:26px;line-height:1.15;margin:8px 0 4px;overflow-wrap:anywhere}
+.memory .md{font-size:14px;color:#E3D8C4}
+.memory button{margin-top:12px;min-height:40px;padding:0 18px;border-radius:var(--pill);box-shadow:inset 0 0 0 1.5px #C9D3BE;color:var(--on-dark);font-weight:600;font-size:14px}
+.day{margin-bottom:16px}
+.dh{display:flex;justify-content:space-between;align-items:baseline;margin:0 4px 8px;font-size:15px}
+.dh span{color:var(--muted);font-size:13px}
+.more{display:block;margin:6px auto 0;min-height:44px;padding:0 20px;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.sug{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.sug button{min-height:40px;padding:0 14px;border-radius:var(--pill);background:var(--paper);border:1px solid var(--line);font-size:14.5px;font-weight:500}
+.sug button:active{background:var(--sage-l)}
+
+/* journal */
+.jhead{display:flex;gap:10px;margin-top:16px}
+.jhead .stat{flex:1}
+.write{display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin-top:16px;background:var(--paper);border:1.5px solid var(--sage-d);border-radius:var(--r);padding:18px}
+.write .ic{width:46px;height:46px;border-radius:14px}
+.write b{display:block;font-size:17px}
+.write span{color:var(--muted);font-size:14.5px}
+.jentry{display:block;width:100%;text-align:left;padding:16px 18px;border-top:1px solid var(--line)}
+.jentry:first-child{border-top:0}
+.jentry:active{background:var(--sand)}
+.jentry .jt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.jentry .jx{margin-top:4px;color:var(--ink);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line;overflow-wrap:anywhere}
+.prompt{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 10px;padding:12px 14px;border-radius:14px;background:var(--sage-l);font-size:15px}
+.prompt button{flex:none;font-weight:600;text-decoration:underline;text-underline-offset:3px;font-size:14px;min-height:36px}
+textarea.jtext{display:block;width:100%;min-height:42vh;border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:16px;font-size:17px;line-height:1.6;outline:none;resize:none}
+textarea.jtext:focus,textarea.ltext:focus{border-color:var(--sage-d)}
+textarea.ltext{display:block;width:100%;border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:14px 16px;font-size:18px;outline:none;resize:none;margin-top:10px}
+
+/* forms */
+label.f{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:22px 0 8px}
+.inp{width:100%;height:52px;border-radius:14px;border:1px solid var(--line);background:var(--paper);padding:0 16px;font-size:17px;outline:none}
+.inp:focus{border-color:var(--sage-d)}
+select.inp{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 50%,calc(100% - 16px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:40px;font-size:16px}
+.money{position:relative}
+.money .inp{padding-left:66px;font-family:var(--head);font-size:24px;font-weight:700}
+.money .sym{position:absolute;left:6px;top:6px;bottom:6px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:10px;background:var(--sand-2);font-family:var(--head);font-size:20px;font-weight:700}
+.money.after .inp{padding-left:16px;padding-right:76px}
+.money.after .sym{left:auto;right:6px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{min-height:44px;padding:0 16px;border-radius:var(--pill);background:var(--paper);border:1px solid var(--line);font-weight:600;font-size:15px}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--on-dark);border-color:var(--ink)}
+.seg.opts{flex-direction:column;gap:10px}
+.seg.opts button{min-height:0;padding:0;border:0;background:none;display:flex;align-items:center;gap:12px;text-align:left}
+.seg.opts b{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:var(--pill);background:var(--paper);border:1px solid var(--line);font-weight:600;white-space:nowrap}
+.seg.opts button[aria-pressed=true]{background:none;color:inherit}
+.seg.opts button[aria-pressed=true] b{background:var(--ink);color:var(--on-dark);border-color:var(--ink)}
+.seg.opts span{font-weight:400;color:var(--muted);font-size:15px}
+.hint{font-size:14px;color:var(--muted);margin:8px 0 0}
+.curline{margin:14px 0 0;color:var(--muted)}
+
+/* banner */
+.bline{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:4px 0 10px;font-size:15px}
+.band-wrap .bline{background:var(--sage-l);border-color:transparent}
+.bline svg{width:16px;height:16px;transform:rotate(180deg);flex:none}
+.sblock{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px 20px;margin-top:14px}
+.sblock .sn{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);font-weight:700}
+.sblock .stt{font-family:var(--head);font-weight:700;font-size:21px;margin:2px 0 6px}
+.sblock p{margin:0 0 12px;color:var(--brown)}
+.sblock p:last-child{margin-bottom:0}
+.sblock .step{background:var(--sand);border-radius:12px;padding:12px 14px;line-height:1.9;color:var(--ink)}
+.gi{width:20px;height:20px;vertical-align:-4px;color:#1a73e8;margin:0 2px}
+.remind{position:relative;background:var(--paper);border:1.5px solid var(--sage-d);border-radius:var(--r);padding:18px 20px;margin:4px 0 12px}
+.remind .x{position:absolute;top:6px;right:6px}
+.remind b{display:block;font-family:var(--head);font-size:20px;padding-right:36px}
+.remind p{margin:6px 0 12px;color:var(--brown)}
+
+/* tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--paper);border-top:1px solid var(--line);padding:6px max(10px,var(--sr)) calc(var(--sb) + 6px) max(10px,var(--sl))}
+.tabs nav{max-width:540px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 5px;border-radius:14px;color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:600}
+.tabs a svg{width:23px;height:23px}
+.tabs a[aria-current=page]{color:var(--ink);background:var(--sage-l)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(40,26,16,.38);opacity:0;transition:opacity .2s;z-index:10}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:540px;background:var(--sand);border-radius:28px 28px 0 0;padding:10px max(20px,var(--sr)) calc(var(--sb) + 18px) max(20px,var(--sl));transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.8,.2,1);z-index:11;max-height:94dvh;overflow:auto}
+.open .scrim{opacity:1}.open .sheet{transform:none}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 6px}
+.sheet .head{display:flex;align-items:center;justify-content:space-between}
+.sheet .head div{font-weight:700}
+.ask p{font-size:17px;margin:10px 4px 18px}
+.display{text-align:center;font-family:var(--head);font-weight:700;font-size:54px;margin:10px 0 4px;font-variant-numeric:tabular-nums}
+.display.ph{color:var(--line)}
+.note{display:block;margin:0 auto 14px;width:min(240px,100%);height:44px;border-radius:var(--pill);border:1px solid var(--line);background:var(--paper);text-align:center;font-size:16px;outline:none}
+.note:focus{border-color:var(--sage-d)}
+.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.pad button{height:58px;border-radius:16px;background:var(--paper);border:1px solid var(--line);font-size:24px;font-weight:600}
+.pad button:active{background:var(--sage-l)}
+.pad svg{width:24px;height:24px;vertical-align:middle}
+.menu{display:grid;gap:10px;margin-top:10px}
+
+.toast{position:fixed;left:50%;top:calc(var(--st) + 64px);transform:translate(-50%,-12px);background:var(--ink);color:var(--on-dark);padding:10px 18px;border-radius:var(--pill);font-size:15px;opacity:0;transition:.25s;z-index:20;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{text-align:center;color:var(--muted);font-size:13.5px;margin-top:30px;line-height:1.9}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="tabs" id="tabs"></div>
+<div id="layer"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const KEY = 'feelbetter.v1';
+const DAY = 864e5;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+const I = {
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  fwd:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  more:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5H9l-6 7 6 7h12zM17 9l-6 6M11 9l6 6"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 12H7zM9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',
+  wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18M16 15h2"/></svg>',
+  sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5c-4.6-3.4-8-6.3-8-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 8 2.3c0 3.9-3.4 6.8-8 10.2z"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>',
+  spark:'<svg class="spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5l2.1 8.4 8.4 2.1-8.4 2.1L12 22.5l-2.1-8.4L1.5 12l8.4-2.1z"/></svg>',
+  share:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1"/></svg>',
+  add:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>'
+};
+
+/* ---------- storage ---------- */
+let S;
+const blank = () => ({ v: 1, money: { trackings: [], cur: 'EUR' }, lucky: { entries: [], notes: {} }, journal: { entries: [] } });
+function normal(d){
+  const s = blank();
+  if (d && typeof d === 'object') {
+    if (d.money && Array.isArray(d.money.trackings)) s.money = { trackings: d.money.trackings, cur: d.money.cur || 'EUR' };
+    if (d.lucky && Array.isArray(d.lucky.entries)) s.lucky = { entries: d.lucky.entries, notes: (d.lucky.notes && typeof d.lucky.notes === 'object') ? d.lucky.notes : {} };
+    if (d.journal && Array.isArray(d.journal.entries)) s.journal = { entries: d.journal.entries };
+    ['lastBackup', 'backupSnooze', 'browserOk'].forEach(k => { if (d[k]) s[k] = d[k]; });
+  }
+  if (!CUR[s.money.cur]) s.money.cur = 'EUR';
+  s.money.trackings.forEach(t => { if (!CUR[t.cur]) t.cur = s.money.cur; if (!Array.isArray(t.expenses)) t.expenses = []; });
+  return s;
+}
+const read = k => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch(e){ return null; } };
+function load(){
+  const d = read(KEY);
+  if (d) { S = normal(d); return; }
+  S = blank();
+  // first run: pick up data from the separate What's Left and Lucky Day apps on the same site
+  const wl = read('whatsleft.v1'), ld = read('luckyday.v1');
+  if (wl && Array.isArray(wl.trackings)) S.money = { trackings: wl.trackings, cur: wl.cur || 'EUR' };
+  if (ld && Array.isArray(ld.entries)) S.lucky = { entries: ld.entries, notes: ld.notes || {} };
+  S = normal(S);
+  if (wl || ld) save();
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){ toast('Could not save on this device.'); } }
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(e){}
+
+/* ---------- platform ---------- */
+const UA = navigator.userAgent || '';
+const isIOS = /iphone|ipad|ipod/i.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1);
+const isAndroid = /android/i.test(UA);
+const inApp = (() => { const m = UA.match(/Instagram|FBAN|FBAV|FB_IAB|Snapchat|TikTok|musical_ly|LinkedInApp|Pinterest/i); if (!m) return null; const k = m[0].toLowerCase();
+  return k.includes('insta') ? 'Instagram' : k.startsWith('fb') ? 'Facebook' : k.includes('snap') ? 'Snapchat' : (k.includes('tiktok') || k.includes('musical')) ? 'TikTok' : k.includes('linked') ? 'LinkedIn' : 'Pinterest'; })();
+const installed = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch(e){ return false; } };
+const mobileBrowser = () => !installed() && (isIOS || isAndroid) && !S.browserOk;
+const isSafari = () => isIOS && !inApp;
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (location.hash === '#setup') render(); });
+
+/* ---------- money & dates ---------- */
+const CUR = {
+  EUR:{sym:'€', after:true, dec:',', grp:' ', name:'Euro'},
+  GBP:{sym:'£', after:false, dec:'.', grp:',', name:'Pound sterling'},
+  USD:{sym:'$', after:false, dec:'.', grp:',', name:'US dollar'},
+  AUD:{sym:'A$', after:false, dec:'.', grp:',', name:'Australian dollar'},
+  SEK:{sym:'kr', after:true, dec:',', grp:' ', name:'Swedish krona'},
+  NOK:{sym:'kr', after:true, dec:',', grp:' ', name:'Norwegian krone'},
+  DKK:{sym:'kr', after:true, dec:',', grp:'.', name:'Danish krone'}
+};
+const curOf = t => CUR[(t && t.cur) || S.money.cur] || CUR.EUR;
+function num(c, C){ const a = Math.abs(c), w = Math.floor(a / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, C.grp); return w + C.dec + String(a % 100).padStart(2, '0'); }
+function money(c, C){ const n = num(c, C), sign = c < 0 ? '−' : ''; return C.after ? sign + n + ' ' + C.sym : sign + C.sym + n; }
+const fmtFor = t => { const C = curOf(t); return c => money(c, C); };
+function parseCents(str){ const s = String(str).replace(/\s/g, '').replace(',', '.'); if (!/^\d*\.?\d{0,2}$/.test(s) || s === '' || s === '.') return NaN; return Math.round(parseFloat(s) * 100); }
+function parseFor(str, C){ let v = String(str).replace(/[\s ]/g, ''); const other = C.dec === ',' ? '.' : ',';
+  if (v.includes(C.dec)) v = v.split(other).join('');
+  else if (v.includes(other) && /[.,]\d{1,2}$/.test(v) && v.split(other).length === 2) v = v.replace(other, C.dec);
+  else v = v.split(other).join('');
+  return parseCents(v.replace(C.dec, '.')); }
+const inputStr = (c, C) => c ? (c / 100).toFixed(2).replace('.', C.dec) : '';
+const startOfDay = t => { const d = new Date(t); d.setHours(0,0,0,0); return d.getTime(); };
+const dayKey = t => { const d = new Date(t); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); };
+const keyStart = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d).getTime(); };
+function addPeriod(t, p){ const d = new Date(t);
+  if (p === 'weekly') d.setDate(d.getDate() + 7); else if (p === 'fortnightly') d.setDate(d.getDate() + 14); else if (p === 'monthly') d.setMonth(d.getMonth() + 1);
+  return d.getTime(); }
+const F = {
+  dm: new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'short'}),
+  time: new Intl.DateTimeFormat('en-GB', {hour:'2-digit', minute:'2-digit'}),
+  long: new Intl.DateTimeFormat('en-GB', {weekday:'long', day:'numeric', month:'long'}),
+  short: new Intl.DateTimeFormat('en-GB', {weekday:'short', day:'numeric', month:'short'}),
+  full: new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'long', year:'numeric'})
+};
+function dayLabel(t){ const today = startOfDay(Date.now()), d = startOfDay(t); return d === today ? 'Today' : d === today - DAY ? 'Yesterday' : F.short.format(t); }
+function when(t){ const today = startOfDay(Date.now()), d = startOfDay(t); return (d === today ? 'Today' : d === today - DAY ? 'Yesterday' : F.dm.format(t)) + ', ' + F.time.format(t); }
+const plural = (n, w, ws) => n + ' ' + (n === 1 ? w : (ws || w + 's'));
+const nl2br = t => esc(t).replace(/\n/g, '<br>');
+
+/* ---------- what's left: model ---------- */
+const PERIODS = { oneoff:'One-off', weekly:'Weekly', fortnightly:'Fortnightly', monthly:'Monthly' };
+const DEFNAME = { oneoff:'Tracking', weekly:'Weekly budget', fortnightly:'Fortnightly budget', monthly:'Monthly budget' };
+const spent = t => t.expenses.reduce((a, e) => a + e.amount, 0);
+const hasBudget = t => t.mode === 'budget';
+const activeT = () => S.money.trackings.filter(t => t.status === 'active').sort((a,b) => a.created - b.created);
+const historyT = () => S.money.trackings.filter(t => t.status === 'ended').sort((a,b) => (b.endedAt||0) - (a.endedAt||0));
+const byId = id => S.money.trackings.find(t => t.id === id);
+const range = t => F.dm.format(t.start) + '–' + F.dm.format((t.endedAt || t.end || Date.now()) - (t.end && !t.endedAt ? 1 : 0));
+function rollover(){
+  const now = Date.now(); let changed = false;
+  for (const t0 of activeT()) { let t = t0;
+    while (t.period !== 'oneoff' && t.end && now >= t.end) {
+      t.status = 'ended'; t.endedAt = t.end;
+      const n = { id: uid(), name: t.name, mode: t.mode, amount: t.amount, period: t.period, cur: t.cur, start: t.end, end: addPeriod(t.end, t.period), created: t.created, status: 'active', expenses: [] };
+      S.money.trackings.push(n); t = n; changed = true; } }
+  if (changed) save();
+}
+function summary(t){
+  const s = spent(t), now = Date.now();
+  const o = { spent: s, left: hasBudget(t) ? t.amount - s : null, pct: 0, over: false, days: null, perDay: null };
+  if (hasBudget(t)) { o.pct = t.amount > 0 ? Math.min(100, s / t.amount * 100) : 100; o.over = o.left < 0; }
+  if (t.end && t.status === 'active') { o.days = Math.max(1, Math.ceil((t.end - now) / DAY)); if (hasBudget(t) && o.left > 0) o.perDay = Math.floor(o.left / o.days); }
+  return o;
+}
+
+/* ---------- lucky: model ---------- */
+const L = () => S.lucky;
+const luckyToday = () => L().entries.filter(e => startOfDay(e.t) === startOfDay(Date.now())).sort((a,b) => a.t - b.t);
+function luckyPast(){
+  const today = startOfDay(Date.now()), map = new Map();
+  const get = k => { if (!map.has(k)) map.set(k, { key: k, t: keyStart(k), entries: [], note: L().notes[k] }); return map.get(k); };
+  L().entries.filter(e => startOfDay(e.t) < today).forEach(e => get(dayKey(e.t)).entries.push(e));
+  Object.keys(L().notes).filter(k => keyStart(k) < today && L().notes[k] && L().notes[k].text).forEach(k => get(k));
+  return [...map.values()].sort((a,b) => b.t - a.t).map(d => (d.entries.sort((a,b) => a.t - b.t), d));
+}
+
+/* ---------- journal: model ---------- */
+const J = () => S.journal;
+const jDays = () => new Set(J().entries.map(e => dayKey(e.t)));
+const wroteToday = () => jDays().has(dayKey(Date.now()));
+function streak(){
+  const days = jDays(); let d = startOfDay(Date.now()), n = 0;
+  if (!days.has(dayKey(d))) d -= DAY;
+  while (days.has(dayKey(d))) { n++; d = startOfDay(d - DAY / 2); }
+  return n;
+}
+const PROMPTS = [
+  "What's on your mind right now?",
+  'What took most of your energy today?',
+  "What's one thing you'd like to let go of?",
+  'When did you feel most like yourself today?',
+  "What's something you're looking forward to?",
+  'What would you say to a friend who had your day?',
+  'What are you carrying that you could put down?',
+  'What surprised you today?',
+  "What's one small thing that went well?",
+  'How does your body feel right now?'
+];
+
+/* ---------- router ---------- */
+window.addEventListener('hashchange', render);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { rollover(); render(); } });
+let showDays = 7, memIdx = null, justAdded = null, jShow = 20, lastView = '';
+
+function render(){
+  try { renderInner(); } catch(err) {
+    try { console.error(err); } catch(e){}
+    $('#app').innerHTML = top('', '') + `<h1 style="margin-top:20px">Something went wrong.</h1><p class="sub">Everything you've saved is still on this phone. Please try again.</p>
+      <div class="actions"><button class="btn block" onclick="location.hash='';location.reload()">try again</button></div><p class="hint" style="text-align:center">${esc(err && err.message)}</p>`;
+  }
+}
+function renderInner(){
+  closeSheet(true);
+  const h = location.hash.replace(/^#/, '');
+  const [sec, a, id] = h.split('-');
+  const app = $('#app'); let out, tab = 'home';
+  if (sec === 'money') { tab = 'money';
+    if (a === 't' && byId(id)) out = vTracking(byId(id));
+    else if (a === 'new') out = vForm(null);
+    else if (a === 'edit' && byId(id)) out = vForm(byId(id));
+    else out = vMoney();
+  }
+  else if (sec === 'lucky') { tab = 'lucky'; out = vLucky(); }
+  else if (sec === 'journal') { tab = 'journal'; out = vJournal(); }
+  else if (sec === 'backup') { tab = ''; out = vBackup(); }
+  else if (sec === 'setup') { tab = ''; out = vSetup(); }
+  else out = vHome();
+  app.innerHTML = out;
+  document.body.classList.toggle('band', out.startsWith('<div class="band-wrap'));
+  $('#tabs').innerHTML = tabs(tab);
+  if (sec === 'money' && (a === 'new' || a === 'edit')) bindForm(a === 'edit' ? byId(id) : null);
+  if (h !== lastView) window.scrollTo(0, 0);
+  lastView = h;
+}
+function tabs(cur){
+  const t = (k, href, ic, label) => `<a href="${href}" ${cur === k ? 'aria-current="page"' : ''}>${ic}<span>${label}</span></a>`;
+  return `<nav aria-label="Sections">${t('home', '#', I.home, 'Home')}${t('money', '#money', I.wallet, "What's Left")}${t('lucky', '#lucky', I.sun, 'Lucky Day')}${t('journal', '#journal', I.book, 'Journal')}</nav>`;
+}
+const top = (left, right, title, sub) => `<div class="top">${left || '<span class="spacer"></span>'}<div class="brand"><b>${title || 'Feel Better'}</b>${sub ? `<span>${sub}</span>` : ''}</div>${right || '<span class="spacer"></span>'}</div>`;
+const backBtn = to => `<button class="iconbtn" aria-label="Back" onclick="location.hash='${to}'">${I.back}</button>`;
+const browserLine = () => mobileBrowser() ? `<button class="bline" onclick="location.hash='setup'"><span>You're in ${isSafari() ? 'Safari' : 'the browser'}. <b>Add it to your home screen</b></span>${I.back}</button>` : '';
+
+/* ---------- views: home ---------- */
+function greet(){ const h = new Date().getHours(); return h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening'; }
+function moneyStatus(){
+  const a = activeT();
+  if (!a.length) return 'Set an amount and start tracking';
+  const t = a.find(hasBudget) || a[0], m = summary(t), f = fmtFor(t);
+  if (hasBudget(t)) return `${esc(t.name)}: <span class="${m.over ? 'neg' : ''}">${f(m.over ? -m.left : m.left)} ${m.over ? 'over' : 'left'}</span>`;
+  return `${esc(t.name)}: ${f(m.spent)} spent`;
+}
+function luckyStatus(){ const n = luckyToday().length; return n ? `${plural(n, 'lucky thing')} today` : 'Nothing caught yet today'; }
+function journalStatus(){ const s = streak();
+  if (wroteToday()) return `Written today${s > 1 ? ` · ${s}-day streak` : ''}`;
+  if (s) return `${s}-day streak. Keep it going`;
+  return J().entries.length ? 'Nothing written today yet' : 'Write your first entry'; }
+function appCard(href, ic, name, forWho, line, help, status){
+  return `<a class="appcard" href="${href}"><span class="ic">${ic}</span><div class="nm">${name}</div><div class="for">${forWho}</div>
+    <p>${line} ${help}</p><div class="status"><span>${status}</span>${I.fwd}</div></a>`;
+}
+const LOGO = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#EFE6D6"/><path d="M16 23c-4-3-7-5.5-7-9a3.8 3.8 0 0 1 7-2 3.8 3.8 0 0 1 7 2c0 3.5-3 6-7 9z" fill="#5E7052"/></svg>';
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const homeTop = () => `<div class="top"><a class="logo" href="#">${LOGO}<div><b>Feel Better</b><span>Lamerla</span></div></a><button class="iconbtn" aria-label="Menu" onclick="FB.menu()">${I.more}</button></div>`;
+const tile = (href, ic, name, forWho, st, dark) => `<a class="tile${dark ? ' dark' : ''}" href="${href}"><span class="ic">${ic}</span><div><div class="nm">${name}</div><div class="for">${forWho}</div><div class="st">${st}</div></div></a>`;
+function vHome(){
+  let out = `<div class="band-wrap hero">${homeTop()}${browserLine()}
+    <p class="eyebrow" style="margin-top:34px">${greet()} · ${F.long.format(Date.now())}</p>
+    <h1>Three small apps to help you feel better.</h1>
+    <p class="sub">Take control of your money, notice the good things, and make sense of how you feel. Everything stays on your phone.</p></div>`;
+  out += `<div>${backupCard()}<div class="tiles">
+    ${tile('#money', I.wallet, "What's Left", 'For your money', 'An app that helps you become aware of your spending, in a world where spending is invisible. This can help you save money.')}
+    ${tile('#lucky', I.sun, 'Lucky Day', 'For your mindset', 'An app that shifts your attention to the good things. This can help you feel better.')}
+    ${tile('#journal', I.book, 'Daily Journal', 'For your feelings', 'An app that gives you a simple space to get it all out. This can help you figure things out.')}
+    ${tile('#backup', I.lock, 'Yours alone', 'Private by design', 'Everything stays on your phone. No account, no tracking, nothing sent anywhere.', true)}
+  </div></div>`;
+  return out + `<div class="foot">Made with care by Lamerla in Finland<br><a class="link" href="#backup">Backup &amp; settings</a></div>`;
+}
+const band = (back, label, eyebrow, title, sub, tight) => `<div class="band-wrap${tight ? ' tight' : ''}">${top(backBtn(back), '', label)}<p class="eyebrow" style="margin-top:22px">${eyebrow}</p><h1>${title}</h1>${sub ? `<p class="sub">${sub}</p>` : ''}</div>`;
+
+/* backup reminder */
+function backupDue(){
+  const n = S.money.trackings.reduce((a,t) => a + t.expenses.length, 0) + L().entries.length + J().entries.length;
+  if (n < 12) return false;
+  const now = Date.now();
+  if (S.backupSnooze && now - S.backupSnooze < 14 * DAY) return false;
+  return !S.lastBackup || now - S.lastBackup > 30 * DAY;
+}
+const backupTip = () => isIOS ? 'Tip: choose <b>Save to Files</b> → <b>iCloud Drive</b>, so it isn’t only on this phone.' : 'Tip: save it to Google Drive or email it to yourself, so it isn’t only on this phone.';
+function backupCard(){
+  if (!backupDue()) return '';
+  return `<div class="remind"><button class="iconbtn x" aria-label="Remind me later" onclick="FB.snooze()">${I.close}</button><b>Save a backup.</b>
+    <p>Everything lives only on this phone. A backup keeps it safe if you lose or change phones.</p>
+    <button class="btn block" onclick="FB.exportData()">save a backup</button><p class="hint">${backupTip()}</p></div>`;
+}
+
+/* ---------- views: what's left ---------- */
+function moneyCard(t){
+  const m = summary(t), f = fmtFor(t);
+  const tag = t.period === 'oneoff' ? '' : `<span class="tag">${PERIODS[t.period]}</span>`;
+  let amt, meta, bar = '';
+  if (hasBudget(t)) {
+    amt = `<span class="${m.over ? 'neg' : ''}">${f(m.over ? -m.left : m.left)}</span><small>${m.over ? 'over' : 'left'}</small>`;
+    bar = `<div class="bar ${m.over ? 'over' : ''}"><i style="width:${m.pct}%"></i></div>`;
+    meta = m.days ? plural(m.days, 'day') + ' left' + (m.perDay != null ? ' · ' + f(m.perDay) + ' per day' : '') : `${f(m.spent)} of ${f(t.amount)} spent`;
+  } else { amt = `${f(-m.spent)}<small>spent</small>`; meta = plural(t.expenses.length, 'purchase') + (m.days ? ' · ' + plural(m.days, 'day') + ' left' : ''); }
+  return `<button class="card" onclick="location.hash='money-t-${t.id}'"><div class="row"><span class="name">${esc(t.name)}</span>${tag}</div><div class="amt">${amt}</div>${bar}<div class="meta">${meta}</div></button>`;
+}
+function histItem(t){
+  const s = spent(t), f = fmtFor(t); let sub = range(t);
+  if (hasBudget(t)) { const d = t.amount - s; sub += ' · ' + (d >= 0 ? f(d) + ' under' : f(-d) + ' over'); }
+  return `<button class="item" onclick="location.hash='money-t-${t.id}'"><div class="t"><div>${esc(t.name)}</div><span>${sub}</span></div><div class="v">${hasBudget(t) ? f(s) : f(-s)}</div></button>`;
+}
+function vMoney(){
+  const a = activeT(), h = historyT();
+  let out = band('', "What's Left", 'For your money', 'Become aware.<br>Be in control.', 'An app that helps you become aware of your spending, in a world where spending is invisible. This can help you save money.', a.length || h.length);
+  if (!a.length && !h.length) {
+    out += `<div class="card" style="padding:22px 20px"><ul class="steps" style="margin:0"><li><i>1</i>Set an amount.</li><li><i>2</i>Tap in what you spend.</li><li><i>3</i>Know what's left.</li></ul>
+      <div class="actions"><button class="btn block" onclick="location.hash='money-new'">${I.plus} start tracking</button></div></div>
+      <div class="story"><div class="who">Kat, founder</div><div class="st">The weekly sweep</div>
+      <p>I deliberately make my weekly amount a little too high, so my spending never feels restrictive.</p>
+      <p>During the week, I tap in what I spend and watch what's left. At the end of the week, whatever remains goes into my savings account. Then I start again.</p>
+      <p>Instead of feeling like I've failed every time I spend, I get a small reward every week.</p></div>`;
+    return out;
+  }
+  out += `<div>${a.length ? a.map(moneyCard).join('') : '<div class="list"><div class="empty">Nothing running right now.</div></div>'}</div>`;
+  out += `<div class="actions" style="margin-top:6px"><button class="btn block" onclick="location.hash='money-new'">${I.plus} new tracking</button></div>`;
+  out += `<h2 class="sec">History</h2>` + (h.length ? `<div class="list">${h.map(histItem).join('')}</div>` : '<div class="list"><div class="empty">Finished trackings are saved here.</div></div>');
+  return out;
+}
+function vTracking(t){
+  const m = summary(t), ended = t.status === 'ended', f = fmtFor(t);
+  let out = top(backBtn('money'), `<button class="iconbtn" aria-label="Options" onclick="FB.options('${t.id}')">${I.more}</button>`, "What's Left");
+  out += `<p class="eyebrow" style="margin-top:14px">${ended ? 'history · ' + range(t) : (t.period === 'oneoff' ? 'one-off' : PERIODS[t.period].toLowerCase() + ' · ' + range(t))}</p><div class="h1" style="font-size:32px">${esc(t.name)}</div>`;
+  if (hasBudget(t)) {
+    out += `<div class="big ${m.over ? 'over' : ''}"><div class="n ${m.over ? 'neg' : ''}">${f(m.over ? -m.left : m.left)}</div><div class="l">${m.over ? 'over budget' : (ended ? 'was left' : 'left')}</div><div class="bar ${m.over ? 'over' : ''}"><i style="width:${m.pct}%"></i></div></div><div class="stats">`;
+    if (!ended && m.days) out += `<div class="stat"><b>${m.days}</b><span>${m.days === 1 ? 'day' : 'days'} remaining</span></div><div class="stat"><b>${m.perDay != null ? f(m.perDay) : '—'}</b><span>per day</span></div>`;
+    else out += `<div class="stat"><b>${f(m.spent)}</b><span>spent</span></div><div class="stat"><b>${f(t.amount)}</b><span>budget</span></div>`;
+    out += `</div>`;
+  } else out += `<div class="big"><div class="n">${f(-m.spent)}</div><div class="l">spent${t.expenses.length ? ' · ' + plural(t.expenses.length, 'purchase') : ''}</div></div>`;
+  out += ended ? `<div class="actions"><button class="btn ghost block" onclick="FB.reopen('${t.id}')">reopen</button></div>`
+               : `<div class="actions"><button class="btn block" onclick="FB.addExpense('${t.id}')">${I.plus} add purchase</button></div>`;
+  const ex = [...t.expenses].sort((a,b) => b.t - a.t);
+  out += `<h2 class="sec">Purchases</h2>` + (ex.length ? `<div class="list">${ex.map(e => `<button class="item" onclick="FB.editExpense('${t.id}','${e.id}')"><span class="dot">${I.bag}</span><div class="t"><div>${esc(e.note || 'Purchase')}</div><span>${when(e.t)}</span></div><div class="v">${f(hasBudget(t) ? e.amount : -e.amount)}</div></button>`).join('')}</div>` : '<div class="list"><div class="empty">Nothing added yet.</div></div>');
+  return out;
+}
+function vForm(t){
+  const e = t || { name:'', mode:'budget', amount:0, period:'oneoff', cur: S.money.cur };
+  const ck = CUR[e.cur] ? e.cur : 'EUR', C = CUR[ck];
+  let out = top(backBtn(t ? 'money-t-' + t.id : 'money'), '', "What's Left");
+  out += `<h1 style="margin-top:16px">${t ? 'Edit.' : 'New tracking.'}</h1>`;
+  out += `<label class="f" for="fName">name</label><input class="inp" id="fName" maxlength="40" placeholder="e.g. Food shopping, Christmas presents" value="${esc(e.name)}">`;
+  out += `<label class="f">how do you want to track?</label><div class="seg opts" id="fMode">
+    <button type="button" data-v="budget" aria-pressed="${e.mode === 'budget'}"><b>With an amount</b><span>shows what's left</span></button>
+    <button type="button" data-v="zero" aria-pressed="${e.mode === 'zero'}"><b>At zero</b><span>shows what's spent</span></button></div>`;
+  out += `<div id="fAmtWrap"><label class="f" for="fAmt">how much do you have to spend?</label><div class="money ${C.after ? 'after' : ''}" id="fMoney"><button type="button" class="sym" id="fSym" aria-label="Change currency"><span id="fSymT">${C.sym}</span><svg viewBox="0 0 10 6" width="9" height="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg></button><input class="inp" id="fAmt" inputmode="decimal" autocomplete="off" placeholder="0${C.dec}00" value="${inputStr(e.amount, C)}"></div></div>`;
+  out += `<p class="curline" id="fCurLine"><span id="fCurName">${C.name} (${C.sym})</span> · <button type="button" class="link" id="fCurChange">change</button></p>`;
+  out += `<label class="f">period</label><div class="seg" id="fPeriod">${Object.entries(PERIODS).map(([k,v]) => `<button type="button" data-v="${k}" aria-pressed="${e.period === k}">${v}</button>`).join('')}</div><p class="hint" id="fHint"></p>`;
+  out += `<div class="actions" style="margin-top:28px"><button class="btn block" id="fSave">${t ? 'save' : 'start tracking'}</button></div>`;
+  return out;
+}
+function bindForm(t){
+  let mode = t ? t.mode : 'budget', period = t ? t.period : 'oneoff', cur = CUR[(t && t.cur) || S.money.cur] ? ((t && t.cur) || S.money.cur) : 'EUR';
+  const setCur = k => { const prev = CUR[cur], C = CUR[k], v = parseFor($('#fAmt').value, prev); cur = k;
+    $('#fSymT').textContent = C.sym; $('#fMoney').classList.toggle('after', C.after); $('#fCurName').textContent = C.name + ' (' + C.sym + ')';
+    $('#fAmt').placeholder = '0' + C.dec + '00'; if (v > 0) $('#fAmt').value = inputStr(v, C); };
+  const pick = () => { openSheet(sheetHead('Currency') + `<div class="list curpick" style="margin-top:8px">${Object.entries(CUR).map(([k,c]) => `<button class="item" data-k="${k}"><div class="t"><div>${c.name}</div></div><div class="v">${c.sym}${k === cur ? ' ✓' : ''}</div></button>`).join('')}</div>`);
+    $('.curpick').addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; setCur(b.dataset.k); closeSheet(); }); };
+  $('#fSym').onclick = pick; $('#fCurChange').onclick = pick;
+  const seg = (id, set) => $(id).addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return;
+    $(id).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); set(b.dataset.v); upd(); });
+  const upd = () => {
+    $('#fAmtWrap').hidden = mode !== 'budget'; $('#fCurLine').hidden = mode === 'budget';
+    $('#fHint').textContent = period === 'oneoff' ? 'Runs until you end it. Good for a trip, a shopping day or Christmas.'
+      : `Starts ${t ? F.dm.format(t.start) : 'today'}. When the ${ {weekly:'week', fortnightly:'fortnight', monthly:'month'}[period] } ends, it's saved to history and a fresh one begins.`;
+  };
+  seg('#fMode', v => mode = v); seg('#fPeriod', v => period = v); upd();
+  $('#fSave').onclick = () => {
+    const name = $('#fName').value.trim() || DEFNAME[period]; let amount = 0;
+    if (mode === 'budget') { amount = parseFor($('#fAmt').value, CUR[cur]); if (!(amount > 0)) { toast('Add an amount, or choose “At zero”.'); $('#fAmt').focus(); return; } }
+    if (t) { Object.assign(t, { name, mode, amount, cur });
+      if (t.period !== period) { t.period = period; t.end = period === 'oneoff' ? null : addPeriod(t.start, period); }
+      save(); rollover(); location.hash = 'money-t-' + (t.status === 'active' ? t.id : ((activeT().slice(-1)[0] || {}).id || ''));
+    } else { const start = startOfDay(Date.now()); S.money.cur = cur;
+      const n = { id: uid(), name, mode, amount, period, cur, start, end: period === 'oneoff' ? null : addPeriod(start, period), created: Date.now(), status: 'active', expenses: [] };
+      S.money.trackings.push(n); save(); location.replace('#money-t-' + n.id); }
+  };
+}
+function keypad(o){
+  const C = o.cur, D = C.dec;
+  let s = o.amount ? inputStr(o.amount, C).replace(new RegExp('\\' + D + '00$'), '') : '';
+  const keys = ['1','2','3','4','5','6','7','8','9',D,'0','⌫'];
+  openSheet(sheetHead(o.title) + `<div class="display" id="kd"></div>
+    <input class="note" id="kn" placeholder="Optional note" maxlength="40" value="${esc(o.note || '')}" aria-label="Note">
+    <div class="pad" id="kp">${keys.map(k => `<button type="button" data-k="${k}" ${k === '⌫' ? 'aria-label="Delete digit"' : ''}>${k === '⌫' ? I.del : k}</button>`).join('')}</div>
+    ${o.onDelete ? `<div class="row2"><button class="btn danger" id="kdel">delete</button><button class="btn" id="ks">save</button></div>` : `<button class="btn block" id="ks">add</button>`}`);
+  const show = () => { const d = $('#kd'), v = s || '0'; d.textContent = C.after ? v + ' ' + C.sym : C.sym + v; d.classList.toggle('ph', !s); $('#ks').disabled = !(parseCents(s.replace(D, '.')) > 0); };
+  $('#kp').addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; const k = b.dataset.k;
+    if (k === '⌫') s = s.slice(0, -1);
+    else if (k === D) { if (!s.includes(D)) s = (s || '0') + D; }
+    else { if (s.includes(D) && s.split(D)[1].length >= 2) return; if (s.replace(D, '').length >= 7) return; s = (s === '0' ? '' : s) + k; }
+    show(); });
+  $('#ks').onclick = () => { const c = parseCents(s.replace(D, '.')); if (c > 0) o.onSave(c, $('#kn').value.trim()); };
+  if (o.onDelete) $('#kdel').onclick = o.onDelete;
+  show();
+}
+
+/* ---------- views: lucky day ---------- */
+const entryRow = e => `<button class="entry${e.id === justAdded ? ' pop' : ''}" onclick="FB.luckyEdit('${e.id}')">${I.spark}<span class="tx">${esc(e.text)}</span><span class="tm">${F.time.format(e.t)}</span></button>`;
+function noteBlock(k, isToday){
+  const n = L().notes[k];
+  if (n && n.text) return `<button class="dnote" onclick="FB.luckyNote('${k}')"><span class="nl">end of the day</span><span class="nt">${nl2br(n.text)}</span></button>`;
+  if (!isToday) return '';
+  return `<button class="notebtn${new Date().getHours() >= 17 ? ' eve' : ''}" onclick="FB.luckyNote('${k}')"><span class="nl">end of the day</span><b>Write today's note</b><span class="ns">How was your lucky day?</span></button>`;
+}
+function vLucky(){
+  const list = luckyToday(), days = luckyPast();
+  let out = band('', 'Lucky Day', F.long.format(Date.now()), 'Today is my lucky day.', list.length ? `<b>${list.length}</b> lucky ${list.length === 1 ? 'thing' : 'things'} so far today.` : 'An app that shifts your attention to the good things. This can help you feel better.');
+  out += list.length ? `<div class="page">${list.map(entryRow).join('')}</div>`
+    : `<div class="page"><div class="empty">Something lucky will happen today. When it does, tap it in.<br><span style="font-size:14px">Great coffee. A good parking spot. The sun came out.</span></div></div>`;
+  out += `<div class="actions" style="margin-top:14px"><button class="btn block" onclick="FB.luckyAdd()">${I.plus} something lucky</button></div>`;
+  out += noteBlock(dayKey(Date.now()), true);
+  const past = L().entries.filter(e => startOfDay(e.t) < startOfDay(Date.now()));
+  if (past.length) {
+    if (memIdx === null || !past[memIdx]) memIdx = Math.floor(Math.random() * past.length);
+    const m = past[memIdx];
+    out += `<div class="memory"><div class="lbl">a lucky memory</div><div class="mt">${esc(m.text)}</div><div class="md">${F.full.format(m.t)}</div>${past.length > 1 ? '<button onclick="FB.another()">another one</button>' : ''}</div>`;
+  }
+  if (days.length) {
+    out += `<h2 class="sec">Earlier days</h2>` + days.slice(0, showDays).map(d => `<div class="day"><div class="dh"><b>${dayLabel(d.t)}</b><span>${d.entries.length || ''}</span></div>${d.entries.length ? `<div class="page">${d.entries.map(entryRow).join('')}</div>` : ''}${noteBlock(d.key, false)}</div>`).join('');
+    if (days.length > showDays) out += `<button class="more" onclick="FB.moreDays()">show more days</button>`;
+  } else if (!list.length) {
+    out += `<div class="story"><div class="who">The idea</div><div class="st">It started as a paper journal.</div>
+      <p>Every morning, write at the top of the page: today is my lucky day. Every evening, list all the reasons it was.</p>
+      <p>The more you look for luck, the more you find it. Here you catch the lucky moments as they happen, so by evening the list is already there.</p></div>`;
+  }
+  return out;
+}
+const LSUG = ['Great coffee', 'Good parking spot', 'Kind stranger', 'Sunshine', 'No queue', 'Green lights'];
+function luckySheet(e){
+  openSheet(sheetHead(e ? 'Edit' : 'Lucky!') + `<textarea id="et" class="ltext" maxlength="200" rows="2" placeholder="What was lucky?" enterkeyhint="done" aria-label="What was lucky?">${e ? esc(e.text) : ''}</textarea>
+    ${e ? `<div class="row2" style="margin-top:12px"><button class="btn danger" id="edel">delete</button><button class="btn" id="esave">save</button></div>`
+        : `<div class="actions" style="margin-top:12px"><button class="btn block" id="esave">add</button></div><div class="sug">${LSUG.map(s => `<button type="button" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div>`}`);
+  const ta = $('#et'); ta.focus({preventScroll:true});
+  const go = () => { const v = ta.value.trim(); if (!v) { ta.focus(); return; }
+    if (e) { e.text = v; save(); render(); toast('Saved'); }
+    else { const n = { id: uid(), text: v, t: Date.now() }; L().entries.push(n); justAdded = n.id; save(); render(); toast('Lucky!'); setTimeout(() => { justAdded = null; }, 600); } };
+  ta.addEventListener('keydown', ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); go(); } });
+  $('#esave').onclick = go;
+  const sug = $('.sug'); if (sug) sug.addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; ta.value = b.dataset.s; ta.focus(); });
+  if (e) $('#edel').onclick = () => ask('Delete this lucky thing?', 'delete', () => { L().entries = L().entries.filter(x => x.id !== e.id); save(); render(); toast('Deleted'); });
+}
+function luckyNoteSheet(k){
+  const n = L().notes[k], isToday = k === dayKey(Date.now());
+  openSheet(sheetHead(isToday ? "Today's note" : dayLabel(keyStart(k))) + `<textarea id="nt" class="jtext" style="min-height:30vh" maxlength="4000" placeholder="How was your lucky day?" aria-label="Note">${n ? esc(n.text) : ''}</textarea>
+    ${n && n.text ? `<div class="row2" style="margin-top:14px"><button class="btn danger" id="ndel">delete</button><button class="btn" id="nsave">save</button></div>` : `<div class="actions" style="margin-top:14px"><button class="btn block" id="nsave">save</button></div>`}`);
+  const ta = $('#nt'); ta.focus({preventScroll:true});
+  $('#nsave').onclick = () => { const v = ta.value.trim(); if (!v) delete L().notes[k]; else L().notes[k] = { text: v, t: (n && n.t) || Date.now() }; save(); render(); if (v) toast('Note saved'); };
+  const d = $('#ndel'); if (d) d.onclick = () => ask('Delete this note?', 'delete', () => { delete L().notes[k]; save(); render(); toast('Deleted'); });
+}
+
+/* ---------- views: journal ---------- */
+function vJournal(){
+  const es = [...J().entries].sort((a,b) => b.t - a.t), s = streak(), days = jDays().size;
+  let out = band('', 'Daily Journal', F.long.format(Date.now()), 'Get it all out.', 'An app that gives you a simple space to get it all out. This can help you figure things out.');
+  if (es.length) out += `<div class="jhead" style="margin-top:0"><div class="stat"><b>${s}</b><span>day streak</span></div><div class="stat"><b>${days}</b><span>${days === 1 ? 'day' : 'days'} written</span></div></div>`;
+  out += `<button class="write" onclick="FB.jWrite()"><span class="ic">${I.pen}</span><span><b>${wroteToday() ? 'Write some more' : 'Write today'}</b><span>${wroteToday() ? 'Add another entry for today.' : PROMPTS[new Date().getDate() % PROMPTS.length]}</span></span></button>`;
+  if (!es.length) return out + `<div class="story"><div class="who">How it works</div><div class="st">No rules. Just write.</div>
+    <p>A few words or a few pages. Write once a day, or whenever something needs to come out.</p>
+    <p>Stuck? Tap <b>give me a prompt</b> and start from a question.</p></div>`;
+  const groups = []; let cur = null;
+  es.slice(0, jShow).forEach(e => { const k = dayKey(e.t); if (!cur || cur.k !== k) { cur = { k, t: e.t, list: [] }; groups.push(cur); } cur.list.push(e); });
+  out += `<h2 class="sec">Entries</h2>` + groups.map(g => `<div class="day"><div class="dh"><b>${dayLabel(g.t)}</b><span>${g.list.length > 1 ? g.list.length : ''}</span></div><div class="page">${g.list.map(e => `<button class="jentry" onclick="FB.jOpen('${e.id}')"><div class="jt">${F.time.format(e.t)}${e.prompt ? ' · ' + esc(e.prompt) : ''}</div><div class="jx">${esc(e.text)}</div></button>`).join('')}</div></div>`).join('');
+  if (es.length > jShow) out += `<button class="more" onclick="FB.jMore()">show older entries</button>`;
+  return out;
+}
+function journalSheet(e){
+  let pi = -1, prompt = e ? e.prompt || '' : '';
+  openSheet(sheetHead(e ? dayLabel(e.t) + ', ' + F.time.format(e.t) : 'Today') +
+    `<div class="prompt" id="jp"><span id="jpt">${prompt ? esc(prompt) : 'Start anywhere.'}</span><button type="button" id="jpb">${prompt ? 'another prompt' : 'give me a prompt'}</button></div>
+    <textarea id="jt" class="jtext" maxlength="20000" placeholder="What's on your mind?" aria-label="Journal entry">${e ? esc(e.text) : ''}</textarea>
+    ${e ? `<div class="row2" style="margin-top:14px"><button class="btn danger" id="jdel">delete</button><button class="btn" id="jsave">save</button></div>` : `<div class="actions" style="margin-top:14px"><button class="btn block" id="jsave">save entry</button></div>`}`);
+  const ta = $('#jt'); ta.focus({preventScroll:true});
+  $('#jpb').onclick = () => { pi = (pi + 1 + Math.floor(Math.random() * (PROMPTS.length - 1))) % PROMPTS.length; prompt = PROMPTS[pi]; $('#jpt').textContent = prompt; $('#jpb').textContent = 'another prompt'; ta.focus(); };
+  $('#jsave').onclick = () => { const v = ta.value.trim(); if (!v) { ta.focus(); return; }
+    if (e) { e.text = v; e.prompt = prompt || undefined; e.edited = Date.now(); }
+    else J().entries.push({ id: uid(), t: Date.now(), text: v, prompt: prompt || undefined });
+    save(); render(); toast('Saved'); };
+  if (e) $('#jdel').onclick = () => ask('Delete this entry? This can’t be undone.', 'delete', () => { J().entries = J().entries.filter(x => x.id !== e.id); save(); render(); toast('Deleted'); });
+}
+
+/* ---------- views: backup & setup ---------- */
+function vBackup(){
+  const m = S.money.trackings.reduce((a,t) => a + t.expenses.length, 0);
+  let out = top(backBtn(''), '', 'Backup & settings');
+  out += `<h1 style="margin-top:16px">Your data.</h1><p class="sub">Everything lives only on this phone. Nothing is sent anywhere. Clearing your browser data or deleting the app removes it, so keep a backup.</p>
+    <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:18px"><div class="stat"><b>${m}</b><span>purchases</span></div><div class="stat"><b>${L().entries.length}</b><span>lucky things</span></div><div class="stat"><b>${J().entries.length}</b><span>journal entries</span></div></div>
+    <p class="hint" style="margin-top:20px;text-align:center"><b>${S.lastBackup ? 'Last backup: ' + F.full.format(S.lastBackup) : 'No backup yet.'}</b></p>
+    <div class="actions" style="margin-top:12px"><button class="btn block" onclick="FB.exportData()">save a backup</button>
+    <button class="btn ghost block" onclick="document.getElementById('imp').click()">restore from backup</button>
+    <input type="file" id="imp" accept="application/json,.json" hidden onchange="FB.importData(this)"></div>
+    <p class="hint" style="text-align:center">${backupTip()}<br>Old What's Left and Lucky Day backups work here too.</p>
+    <label class="f" for="sCur">default currency</label><select class="inp" id="sCur" onchange="FB.setCur(this.value)">${Object.entries(CUR).map(([k,c]) => `<option value="${k}" ${k === S.money.cur ? 'selected' : ''}>${c.name} (${c.sym})</option>`).join('')}</select>
+    <p class="hint">Used for new trackings in What's Left. Existing trackings keep their own currency.</p>
+    <div class="actions" style="margin-top:28px"><button class="btn ghost block" onclick="location.hash='setup'">add to home screen</button></div>`;
+  return out;
+}
+function vSetup(){
+  const has = S.money.trackings.length + L().entries.length + J().entries.length > 0, mv = has && isIOS && !installed(), n = k => mv ? k + 1 : k;
+  let how;
+  if (inApp) how = `<p class="step">You're inside ${inApp}, which can't add apps. Tap <b>⋯</b> and choose <b>Open in ${isIOS ? 'Safari' : 'browser'}</b>, then come back to this step.</p>`;
+  else if (isIOS) how = `<p class="step">Tap <b>Share</b> ${I.share} then <b>Add to Home Screen</b> ${I.add}</p><p class="hint">Can't see Share? It's in Safari's <b>⋯</b> menu.</p>`;
+  else if (installEvt) how = `<button class="btn block" onclick="FB.install()">add to home screen</button>`;
+  else how = `<p class="step">Open the browser menu <b>⋮</b> and tap <b>Add to Home screen</b> or <b>Install app</b>.</p>`;
+  let out = top(backBtn(''), '', 'Feel Better');
+  out += `<p class="eyebrow" style="margin-top:14px">${mv ? "keep what you've saved" : 'before you start'}</p><h1>${mv ? 'Move to the app.' : 'Two quick steps.'}</h1>`;
+  if (mv) out += `<div class="sblock"><div class="sn">step 1</div><div class="stt">Save what you have.</div><p>On iPhone, the home-screen app has its own storage, so what you've saved here won't move over by itself. Save a backup first, then restore it in the app from <b>Backup &amp; settings</b>.</p><button class="btn ghost block" onclick="FB.exportData()">save a backup</button></div>`;
+  out += `<div class="sblock"><div class="sn">step ${n(1)}</div><div class="stt">Add to your home screen.</div><p>Feel Better works best as an app: one tap from your home screen, full-screen and offline.${isIOS ? ' On iPhone, anything you save in Safari stays in Safari.' : ''}</p>${how}</div>`;
+  out += `<div class="sblock"><div class="sn">step ${n(2)}</div><div class="stt">${mv ? 'Open the app and restore.' : 'Open it from your home screen.'}</div><p>${mv ? 'Open <b>Feel Better</b> from your home screen, go to <b>Backup &amp; settings</b> and tap <b>restore from backup</b>.' : 'Find <b>Feel Better</b> on your home screen and pick where to start.'}</p></div>`;
+  out += `<p style="text-align:center;margin-top:24px"><button class="link" onclick="FB.useBrowser()">${has ? 'keep using' : 'or use it'} in ${isSafari() ? 'Safari' : 'the browser'} instead</button></p>`;
+  return out;
+}
+
+/* ---------- sheets ---------- */
+const sheetHead = title => `<div class="head"><button class="iconbtn" onclick="FB.close()" aria-label="Close">${I.close}</button><div>${esc(title)}</div><span class="spacer"></span></div>`;
+function fitSheet(){
+  const vv = window.visualViewport, sh = document.querySelector('#layer .sheet'); if (!vv || !sh) return;
+  const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+  sh.style.bottom = kb + 'px'; sh.style.maxHeight = Math.max(200, vv.height - 12) + 'px'; sh.style.paddingBottom = kb > 0 ? '14px' : '';
+}
+if (window.visualViewport) { visualViewport.addEventListener('resize', fitSheet); visualViewport.addEventListener('scroll', fitSheet); }
+function openSheet(html){
+  const Ly = $('#layer'), was = Ly.classList.contains('open') && Ly.innerHTML;
+  Ly.innerHTML = `<div class="scrim" onclick="FB.close()"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  fitSheet();
+  if (was) Ly.classList.add('open'); else requestAnimationFrame(() => requestAnimationFrame(() => { Ly.classList.add('open'); fitSheet(); }));
+}
+function closeSheet(now){
+  const Ly = $('#layer'); if (!Ly.innerHTML) return;
+  Ly.classList.remove('open');
+  if (now) Ly.innerHTML = ''; else setTimeout(() => { if (!Ly.classList.contains('open')) Ly.innerHTML = ''; }, 260);
+}
+function ask(msg, okLabel, onOk){
+  openSheet(`<div class="ask">${sheetHead('Are you sure?')}<p>${esc(msg)}</p><div class="row2"><button class="btn ghost" id="aNo">cancel</button><button class="btn ${okLabel === 'delete' ? 'danger' : ''}" id="aYes">${esc(okLabel)}</button></div></div>`);
+  $('#aNo').onclick = () => closeSheet(); $('#aYes').onclick = () => { closeSheet(true); onOk(); };
+}
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2000); }
+
+/* ---------- actions ---------- */
+window.FB = {
+  close: () => closeSheet(),
+  menu(){ openSheet(sheetHead('Menu') + `<div class="menu"><button class="btn ghost block" onclick="location.hash='backup'">backup &amp; settings</button><button class="btn ghost block" onclick="location.hash='setup'">add to home screen</button></div>`); },
+  // what's left
+  addExpense(id){ const t = byId(id); keypad({ title:'Add purchase', cur: curOf(t), onSave(c, note){ t.expenses.push({ id: uid(), amount: c, note, t: Date.now() }); save(); render(); toast(fmtFor(t)(c) + ' added'); } }); },
+  editExpense(id, eid){ const t = byId(id), e = t.expenses.find(x => x.id === eid);
+    keypad({ title:'Edit purchase', cur: curOf(t), amount: e.amount, note: e.note,
+      onSave(c, note){ e.amount = c; e.note = note; save(); render(); },
+      onDelete(){ ask('Delete this purchase?', 'delete', () => { t.expenses = t.expenses.filter(x => x.id !== eid); save(); render(); toast('Deleted'); }); } }); },
+  options(id){ const t = byId(id), ended = t.status === 'ended';
+    openSheet(sheetHead(t.name) + `<div class="menu">${ended ? `<button class="btn ghost block" onclick="FB.reopen('${id}')">reopen</button>`
+      : `<button class="btn ghost block" onclick="location.hash='money-edit-${id}'">edit name, amount or period</button><button class="btn ghost block" onclick="FB.end('${id}')">end &amp; save to history</button>`}
+      <button class="btn danger block" onclick="FB.remove('${id}')">delete</button></div>`); },
+  end(id){ const t = byId(id);
+    ask(t.period === 'oneoff' ? `End “${t.name}” and save it to history?` : `End “${t.name}”? It's saved to history and won't start again.`, 'end', () => { t.status = 'ended'; t.endedAt = Date.now(); save(); location.hash = 'money'; toast('Saved to history'); }); },
+  reopen(id){ const t = byId(id); if (t.period !== 'oneoff' && t.end && Date.now() >= t.end) { t.period = 'oneoff'; t.end = null; }
+    t.status = 'active'; delete t.endedAt; save(); render(); toast('Reopened'); },
+  remove(id){ const t = byId(id); ask(`Delete “${t.name}” and all its purchases? This can't be undone.`, 'delete', () => { S.money.trackings = S.money.trackings.filter(x => x.id !== id); save(); location.hash = 'money'; toast('Deleted'); }); },
+  setCur(v){ S.money.cur = v; save(); toast('New trackings will use ' + CUR[v].name.toLowerCase()); },
+  // lucky
+  luckyAdd(){ luckySheet(null); },
+  luckyEdit(id){ const e = L().entries.find(x => x.id === id); if (e) luckySheet(e); },
+  luckyNote(k){ luckyNoteSheet(k); },
+  another(){ const past = L().entries.filter(e => startOfDay(e.t) < startOfDay(Date.now())); if (past.length > 1) { let i; do { i = Math.floor(Math.random() * past.length); } while (i === memIdx); memIdx = i; } render(); },
+  moreDays(){ showDays += 14; render(); },
+  // journal
+  jWrite(){ journalSheet(null); },
+  jOpen(id){ const e = J().entries.find(x => x.id === id); if (e) journalSheet(e); },
+  jMore(){ jShow += 30; render(); },
+  // app
+  useBrowser(){ S.browserOk = 1; save(); location.hash = ''; },
+  async install(){ if (!installEvt) return; const e = installEvt; installEvt = null; try { e.prompt(); await e.userChoice; } catch(err){} render(); },
+  snooze(){ S.backupSnooze = Date.now(); save(); render(); },
+  async exportData(){
+    const name = 'feel-better-backup-' + new Date().toISOString().slice(0,10) + '.json';
+    const data = { app: 'feel-better', version: 1, exported: Date.now(), money: S.money, lucky: S.lucky, journal: S.journal };
+    const blob = new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' });
+    const done = () => { S.lastBackup = Date.now(); delete S.backupSnooze; save(); render(); toast('Backup saved'); };
+    try { const f = new File([blob], name, { type: 'application/json' });
+      if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Feel Better backup' }); done(); return; }
+    } catch(e){ if (e && e.name === 'AbortError') return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); done();
+  },
+  importData(input){ const f = input.files && input.files[0]; if (!f) return; const r = new FileReader();
+    r.onload = () => { input.value = ''; let d; try { d = JSON.parse(r.result); } catch(e){ toast("That file isn't a backup."); return; }
+      let what, apply;
+      if (d && d.app === 'feel-better') { what = 'Replace everything on this phone with this backup?'; apply = () => { S = normal(Object.assign({}, d, { lastBackup: d.exported, browserOk: S.browserOk })); }; }
+      else if (d && Array.isArray(d.trackings)) { what = `Replace What's Left with this backup (${plural(d.trackings.length, 'tracking')})? Lucky Day and Journal stay as they are.`; apply = () => { S.money = { trackings: d.trackings, cur: d.cur || S.money.cur }; S = normal(S); }; }
+      else if (d && Array.isArray(d.entries) && (d.app === 'lucky-day' || d.notes)) { what = `Replace Lucky Day with this backup (${plural(d.entries.length, 'lucky thing')})? What's Left and Journal stay as they are.`; apply = () => { S.lucky = { entries: d.entries, notes: d.notes || {} }; S = normal(S); }; }
+      else { toast("That file isn't a backup."); return; }
+      ask(what, 'restore', () => { apply(); save(); rollover(); location.hash = ''; render(); toast('Restored'); });
+    };
+    r.readAsText(f); }
+};
+
+/* ---------- start ---------- */
+load(); rollover(); render();
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>
